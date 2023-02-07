@@ -2,7 +2,24 @@ import React from "react";
 import ReactDOM from 'react-dom/client'
 import './index.css';
 
-function Square(props) {
+type squares = string[]
+
+type GameProps = {
+  histories: squares[],
+  stepNumber: number,
+  xIsNext: boolean
+}
+
+type BoardProps = {
+
+}
+
+type SquareProps = {
+  onClick: any,
+  value: string
+}
+
+function Square(props: SquareProps): JSX.Element {
     return (
       <button
         className="square"
@@ -15,7 +32,7 @@ function Square(props) {
 
 class Board extends React.Component {
 
-  renderSquare(i) {
+  renderSquare(i: number) {
     return (
       <Square
         value={this.props.squares[i]}
@@ -48,7 +65,7 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-  constructor(props) {
+  constructor(props: GameProps) {
     super(props) 
     this.state = {
       history: [{
@@ -59,7 +76,7 @@ class Game extends React.Component {
     };
   }
 
-  jumpTo(step) {
+  jumpTo(step: number) {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
@@ -67,7 +84,7 @@ class Game extends React.Component {
 
   }
 
-  handleClick(i) {
+  handleClick(i: number) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -95,7 +112,7 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
-    const moves = history.map((step, move)=> {
+    const moves = history.map((step: number, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
@@ -112,7 +129,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
+            onClick={(i:number) => this.handleClick(i)}
           />
         </div>
         <div className="game-info">
@@ -125,7 +142,7 @@ class Game extends React.Component {
 }
 
 // ========================================
-function calculateWinner(squares) {
+function calculateWinner(squares: squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
