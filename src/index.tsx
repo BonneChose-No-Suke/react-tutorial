@@ -80,6 +80,7 @@ function Game() {
     console.log(stepNumber, xIsNext)
   }
 
+  // stepNumberとhistory等の関係からヒストリーのバグが出ていそう。一気に書き換えていって追いづらくなってしまった。
   const handleClick = (i: number) => {
     const currentHistory = history.slice(0, stepNumber + 1)
     const current = currentHistory[currentHistory.length - 1]
@@ -100,8 +101,6 @@ function Game() {
     // });
   }
 
-  // render() {
-    // const history = this.state.history;
     const current = history[stepNumber]
     const winner = calculateWinner(current)
     let status;
@@ -111,6 +110,7 @@ function Game() {
       status = 'Next player: ' + (xIsNext ? 'X' : 'O')
     }
 
+    // mapの引数で型エラー。indexを試して一旦型エラーが解消したが、ヒストリー機能にバグ、関係ない可能性もあるが一旦 tutorialの形に戻した。
     const moves = history.map((step: number, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
@@ -137,7 +137,6 @@ function Game() {
         </div>
       </div>
     )
-  // }
 }
 
 // ========================================
