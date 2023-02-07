@@ -62,6 +62,7 @@ function Game() {
   const [history, setHistory] = React.useState<squares[]>([squares])
   const [stepNumber, setStepNumber] = React.useState(0)
   const [xIsNext, setXIsNext] = React.useState(true)
+  console.log(history, stepNumber, xIsNext)
   // constructor(props: GameProps) {
   //   super(props) 
   //   this.state = {
@@ -75,8 +76,8 @@ function Game() {
 
   const jumpTo = (step: number) => {
     setStepNumber(step)
-    setXIsNext(stepNumber % 2 === 0)
-
+    setXIsNext(step % 2 === 0)
+    console.log(stepNumber, xIsNext)
   }
 
   const handleClick = (i: number) => {
@@ -87,7 +88,7 @@ function Game() {
       return;
     }
     currentSquares[i] = xIsNext ? 'X' : 'O';
-    setHistory(currentHistory.concat(currentSquares))
+    setHistory(currentHistory.concat([currentSquares]))
     setStepNumber(history.length)
     setXIsNext(!xIsNext)
     // this.setState({
@@ -110,10 +111,10 @@ function Game() {
       status = 'Next player: ' + (xIsNext ? 'X' : 'O')
     }
 
-    const moves = current.map((step: string, move: number)=> {
+    const moves = history.map((step: number, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
-        'Go to game start';
+        'Go to game start'
 
         return (
           <li key={move}>
