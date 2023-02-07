@@ -4,7 +4,7 @@ import { Board } from "./Board"
 type squares = string[]
 
 export const Game = () => {
-  const size:number = 5
+  const size:number = 3
   const squares: squares = Array(size^2).fill(null)
   const [history, setHistory] = React.useState<squares[]>([squares])
   const [stepNumber, setStepNumber] = React.useState(0)
