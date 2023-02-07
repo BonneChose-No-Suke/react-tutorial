@@ -4,7 +4,8 @@ import { Board } from "./Board"
 type squares = string[]
 
 export const Game = () => {
-  const squares: squares = Array(9).fill(null)
+  const size:number = 5
+  const squares: squares = Array(size^2).fill(null)
   const [history, setHistory] = React.useState<squares[]>([squares])
   const [stepNumber, setStepNumber] = React.useState(0)
   const [xIsNext, setXIsNext] = React.useState(true)
@@ -38,7 +39,7 @@ export const Game = () => {
     setCurrent(currentSquares)
   }
 
-    const moves = history.map((index, move: number)=> {
+    const moves = history.map((history, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start'
@@ -56,6 +57,7 @@ export const Game = () => {
           <Board
             squares={current}
             onClick={(i: number) => handleClick(i)}
+            size={size}
           />
         </div>
         <div className="game-info">

@@ -3,18 +3,22 @@ import { Square } from "./Square"
 
 type BoardProps = {
   onClick: (i: number) => void,
-  squares: string[]
+  squares: string[],
+  size: number
 }
 
 export const Board = (props: BoardProps) => {
-    const renderSquare =(i: number) => {
-    return (
+
+  const renderSquare = (index: number) => {
+    return(
       <Square
-        value={props.squares[i]}
-        onClick={()=> props.onClick(i)}
+        value={props.squares[index]}
+        onClick={()=> props.onClick(index)}
       />
     )
   }
+
+  // ボードの列とスクエアをloopを回すかmapを使って反復することで生成する
 
   return (
     <div>
