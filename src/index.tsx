@@ -64,7 +64,6 @@ function Game() {
   const [xIsNext, setXIsNext] = React.useState(true)
   const [current, setCurrent] = React.useState(squares)
 
-  // const current = history[stepNumber]
   const winner = calculateWinner(current)
   let status;
   if (winner) {
@@ -72,16 +71,6 @@ function Game() {
   } else {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O')
   }
-  // constructor(props: GameProps) {
-  //   super(props) 
-  //   this.state = {
-  //     history: [{
-  //       squares: Array(9).fill(null),
-  //     }],
-  //     stepNumber: 0,
-  //     xIsNext: true,
-  //   };
-  // }
 
   const jumpTo = (step: number) => {
     setStepNumber(step)
@@ -89,7 +78,6 @@ function Game() {
     setCurrent(history[step])
   }
 
-  // stepNumberとhistory等の関係からヒストリーのバグが出ていそう。一気に書き換えていって追いづらくなってしまった。
   const handleClick = (i: number) => {
     const currentHistory = history.slice(0, stepNumber + 1)
     const current = currentHistory[currentHistory.length - 1]
@@ -102,16 +90,8 @@ function Game() {
     setStepNumber(history.length)
     setXIsNext(!xIsNext)
     setCurrent(currentSquares)
-    // this.setState({
-    //   history: history.concat([{
-    //     squares: squares,
-    //   }]),
-    //   stepNumber: history.length,
-    //   xIsNext: !this.state.xIsNext,
-    // });
   }
 
-    // mapの引数で型エラー。indexを試して一旦型エラーが解消したが、ヒストリー機能にバグ、関係ない可能性もあるが一旦 tutorialの形に戻した。
     const moves = history.map((index, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
