@@ -115,26 +115,34 @@ export const Game = (props: GameProps) => {
 // ========================================
 function calculateWinner(size:number, squares: squares) {
   let lines = [[0]]
-  let testArray = [...Array(size)].map((_, i)=>i)
   switch(size) {
     case 3:
       lines = winnerOf3
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i]
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          return squares[a];
+        }
+      }
       break
     case 4:
       lines = winnerOf4
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c, d] = lines[i]
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c] && squares[a] === squares[d]) {
+          return squares[a];
+        }
+      }
       break
     case 5:
       lines = winnerOf5
-      break
-  }
-  for (let i = 0; i < lines.length; i++) {
-    testArray = lines[i]
-    for (let j = 1; j < testArray.length; j++){
-      if(squares[0] !== squares[j]) {
-        break
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c, d, e] = lines[i]
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c] && squares[a] === squares[d] && squares[a] === squares[e]) {
+          return squares[a];
+        }
       }
-    }
-    return squares[0]
+      break
   }
   return null
 }

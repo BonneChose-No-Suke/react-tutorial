@@ -14,10 +14,13 @@ export const Board = (props: BoardProps) => {
 
   const board = rowArray.map(row=> {
     return(
-      <div className="board-row">
+      <div
+        key={row}
+        className="board-row">
         {columnArray.map(column=> {
           return(
             <Square
+              key={column}
               value={props.squares[props.size*row + column]}
               onClick={()=>props.onClick(props.size*row + column)}
             />
