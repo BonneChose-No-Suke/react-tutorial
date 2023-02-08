@@ -129,7 +129,7 @@ function calculateWinner(size:number, squares: squares) {
   }
   for (let i = 0; i < lines.length; i++) {
     testArray = lines[i]
-    for (let j = 0; j < testArray.length; j++){
+    for (let j = 1; j < testArray.length; j++){
       if(squares[0] !== squares[j]) {
         break
       }
