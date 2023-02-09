@@ -76,30 +76,19 @@ export const Game = (props: GameProps) => {
 // mapを使ってsetWinningArrayをrefactoringする
 const setWinningArray = (size: number):number[][] => {
   const winningArray: number[][] = []
-  // let rowWinning: number[][] = []
-  // for(let i = 0; i < size; i++) {
-  //   let rowWinningArray = [...Array(size)].map((_, j)=> size*i+j)
-  //   rowWinning.push(rowWinningArray)
-  // }
-  const rowWinning = [...Array(size)].map((_, i) => {
-    return winningArray.push([...Array(size)].map((_, j) => size*i + j))
+  // 横方向の勝利条件
+  const rowWinning = [...Array(size)].map((_, row) => {
+    return winningArray.push([...Array(size)].map((_, j) => size*row + j))
   })
 
-  // let columnWinning: number[][] = []
-  // for(let i = 0; i < size; i++) {
-  //   let columnWinningArray = [...Array(size)].map((_, j)=> size*j+i)
-  //   columnWinning.push(columnWinningArray)
-  // }
-
-  const columnWinning = [...Array(size)].map((_, i) => {
-    return winningArray.push([...Array(size)].map((_, j) => size*j + i))
+  // 縦方向の勝利条件
+  const columnWinning = [...Array(size)].map((_, column) => {
+    return winningArray.push([...Array(size)].map((_, j) => size*j + column))
   })
 
   // 斜め方向の勝利
   winningArray.push([...Array(size)].map((_, j)=> (size+1)*j))
   winningArray.push([...Array(size)].map((_, j)=> (size-1)*(j+1)))
-
-  console.log(winningArray)
 
   return(winningArray)
 }
