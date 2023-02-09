@@ -1,49 +1,51 @@
-import React from "react"
+import { gameReducer, initialState } from "hooks/gameReducer"
+import React, { useReducer } from "react"
 import { Board } from "./Board"
 
 type squares = string[]
 
-type GameProps = {
-  size: number
-}
 
-export const Game = (props: GameProps) => {
+export const Game = () => {
   // state管理をreduceでスッキリさせる
-  const squares: squares = Array(props.size^2).fill(null)
-  const [history, setHistory] = React.useState<squares[]>([squares])
-  const [stepNumber, setStepNumber] = React.useState(0)
-  const [xIsNext, setXIsNext] = React.useState(true)
-  const [current, setCurrent] = React.useState(squares)
+  const size = 5
+  // const [history, setHistory] = React.useState<squares[]>([squares])
+  // const [stepNumber, setStepNumber] = React.useState(0)
+  // const [xIsNext, setXIsNext] = React.useState(true)
+  // const [current, setCurrent] = React.useState(squares)
+  const [state, dispatch] = useReducer(gameReducer, initialState)
+  console.log(state.history)
 
-  const winner = calculateWinner(props.size, current)
+  const winner = calculateWinner(size, state.current)
   let status: string
   if (winner) {
     status = 'Winner: ' + winner;
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O')
+    status = 'Next player: ' + (state.xIsNext ? 'X' : 'O')
   }
 
   const jumpTo = (step: number) => {
-    setStepNumber(step)
-    setXIsNext(step % 2 === 0)
-    setCurrent(history[step])
+    // setStepNumber(step)
+    // setXIsNext(step % 2 === 0)
+    // setCurrent(history[step])
+    dispatch({ type: 'RETURN_TO', payload: {step: step, history: history} })
   }
 
   const handleClick = (i: number) => {
-    const currentHistory = history.slice(0, stepNumber + 1)
+    const currentHistory = state.history.slice(0, state.stepNumber + 1)
     const current = currentHistory[currentHistory.length - 1]
     const currentSquares = current.slice()
-    if (calculateWinner(props.size, currentSquares) || currentSquares[i]) {
+    if (calculateWinner(size, currentSquares) || currentSquares[i]) {
       return;
     }
-    currentSquares[i] = xIsNext ? 'X' : 'O'
-    setHistory(currentHistory.concat([currentSquares]))
-    setStepNumber(history.length)
-    setXIsNext(!xIsNext)
-    setCurrent(currentSquares)
+    currentSquares[i] = state.xIsNext ? 'X' : 'O'
+    // setHistory(currentHistory.concat([currentSquares]))
+    // setStepNumber(history.length)
+    // setXIsNext(!xIsNext)
+    // setCurrent(currentSquares)
+    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, xIsNext: state.xIsNext, current: currentSquares}})
   }
 
-    const moves = history.map((history, move: number)=> {
+    const moves = state.history.map((square:squares, move: number)=> {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start'
@@ -59,9 +61,9 @@ export const Game = (props: GameProps) => {
       <div className="game">
         <div className="game-board">
           <Board
-            squares={current}
+            squares={state.current}
             onClick={(i: number) => handleClick(i)}
-            size={props.size}
+            size={size}
           />
         </div>
         <div className="game-info">

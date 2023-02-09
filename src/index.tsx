@@ -3,7 +3,5 @@ import React  from "react"
 import ReactDOM from 'react-dom/client'
 import './index.css'
 
-const size = 5
-
 const root = ReactDOM.createRoot(document.getElementById("root")!)
-root.render(<Game size={size}  />)
+root.render(<Game />)
