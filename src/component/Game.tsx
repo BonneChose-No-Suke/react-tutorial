@@ -8,6 +8,7 @@ type GameProps = {
 }
 
 export const Game = (props: GameProps) => {
+  // state管理をreduceでスッキリさせる
   const squares: squares = Array(props.size^2).fill(null)
   const [history, setHistory] = React.useState<squares[]>([squares])
   const [stepNumber, setStepNumber] = React.useState(0)
