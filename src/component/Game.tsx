@@ -73,6 +73,7 @@ export const Game = (props: GameProps) => {
 }
 
 // サイズを入力して勝利条件を設定する
+// mapを使ってsetWinningArrayをrefactoringする
 const setWinningArray = (size: number): number[][] => {
   let rowWinning: number[][] = []
   for(let i = 0; i < size; i++) {
