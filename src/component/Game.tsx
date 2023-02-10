@@ -1,19 +1,11 @@
 import { gameReducer, initialState } from "hooks/gameReducer"
 import React, { useReducer } from "react"
+import { squares } from "type/GameState"
 import { Board } from "./Board"
 
-type squares = string[]
-
-
 export const Game = () => {
-  // state管理をreduceでスッキリさせる
   const size = 5
-  // const [history, setHistory] = React.useState<squares[]>([squares])
-  // const [stepNumber, setStepNumber] = React.useState(0)
-  // const [xIsNext, setXIsNext] = React.useState(true)
-  // const [current, setCurrent] = React.useState(squares)
   const [state, dispatch] = useReducer(gameReducer, initialState)
-  console.log(state.history)
 
   const winner = calculateWinner(size, state.current)
   let status: string
@@ -24,10 +16,7 @@ export const Game = () => {
   }
 
   const jumpTo = (step: number) => {
-    // setStepNumber(step)
-    // setXIsNext(step % 2 === 0)
-    // setCurrent(history[step])
-    dispatch({ type: 'RETURN_TO', payload: {step: step, history: history} })
+    dispatch({ type: 'RETURN_TO', payload: {step: step, history: state.history, current: state.current} })
   }
 
   const handleClick = (i: number) => {
@@ -38,11 +27,7 @@ export const Game = () => {
       return;
     }
     currentSquares[i] = state.xIsNext ? 'X' : 'O'
-    // setHistory(currentHistory.concat([currentSquares]))
-    // setStepNumber(history.length)
-    // setXIsNext(!xIsNext)
-    // setCurrent(currentSquares)
-    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, xIsNext: state.xIsNext, current: currentSquares}})
+    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, current: currentSquares, step: currentHistory.length}})
   }
 
     const moves = state.history.map((square:squares, move: number)=> {

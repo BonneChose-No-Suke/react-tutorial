@@ -1,30 +1,32 @@
-import { GameState } from '../type/GameState'
+import { GameAction, GameState } from '../type/GameState'
 
 export const initialState: GameState =  {
-  history: [Array(3**2).fill(null)],
+  history: [Array(5**2).fill(null)],
   stepNumber: 0,
   xIsNext: true,
-  current:  Array(3**2).fill(null)
+  current:  Array(5**2).fill(null)
 }
 
-export const gameReducer = (state: GameState, action: any):any => {
+export const gameReducer = (state: GameState, action: GameAction):GameState => {
   switch(action.type) {
     case 'TURN_PASSED':
       return {
         ...state,
-        history: (action.payload.currentHistory).concat([action.payload.currentSquares]),
-        stepNumber: (action.payload.currentHistory).length,
-        xIsNext: !(action.payload.xIsNext),
-        current: action.payload.currentSquares
+        history: action.payload.history.concat([action.payload.current]),
+        stepNumber: state.history.length,
+        xIsNext: !state.xIsNext,
+        current: action.payload.current
       }
     case 'RETURN_TO':
       return {
         ...state,
-        history: action.payload.history,
-        stepNumber: action.payload.stepNumber,
+        history: state.history,
+        stepNumber: action.payload.step,
         xIsNext: (action.payload.step) % 2 === 0,
-        current:  action.payload.history[action.payload.stepNumber]
+        current:  state.history[action.payload.step]
       }
+    default:
+      return state
   }
 }
 
