@@ -77,16 +77,18 @@ export const Game = (props: GameProps) => {
 const setWinningArray = (size: number):number[][] => {
   const winningArray: number[][] = []
   // 横方向の勝利条件
-  const rowWinning = [...Array(size)].map((_, row) => {
+  const rowWinning = [...Array(size)]
+  rowWinning.map((_, row) => {
     return winningArray.push([...Array(size)].map((_, j) => size*row + j))
   })
 
   // 縦方向の勝利条件
-  const columnWinning = [...Array(size)].map((_, column) => {
+  const columnWinning = [...Array(size)]
+  columnWinning.map((_, column) => {
     return winningArray.push([...Array(size)].map((_, j) => size*j + column))
   })
 
-  // 斜め方向の勝利
+  // 斜め方向の勝利条件
   winningArray.push([...Array(size)].map((_, j)=> (size+1)*j))
   winningArray.push([...Array(size)].map((_, j)=> (size-1)*(j+1)))
 
