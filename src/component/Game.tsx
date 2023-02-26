@@ -23,11 +23,11 @@ export const Game = () => {
 
   const handleSizeChange = (event: { target: { value: number }; }) => {
     const newSize = Number(event.target.value)
-    dispatch({ type: 'CHANGE_GameBoardSize', payload: { history: state.history, current: state.current, step:state.stepNumber, size: newSize } })
+    dispatch({ type: 'CHANGE_GameBoardSize', payload: { history: state.history, current: state.current, step: state.stepNumber, size: newSize } })
   };
 
   const jumpTo = (step: number) => {
-    dispatch({ type: 'RETURN_TO', payload: {step: step, history: state.history, current: state.current, size: (state.size)} })
+    dispatch({ type: 'RETURN_TO', payload: { step: step, history: state.history, current: state.current, size: (state.size) } })
   }
 
   const handleClick = (i: number) => {
@@ -38,89 +38,82 @@ export const Game = () => {
       return;
     }
     currentSquares[i] = state.xIsNext ? 'X' : 'O'
-    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, current: currentSquares, step: currentHistory.length, size: state.size}})
+    dispatch({ type: 'TURN_PASSED', payload: { history: currentHistory, current: currentSquares, step: currentHistory.length, size: state.size } })
   }
 
-    const moves = state.history.map((square:squares, move: number)=> {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start'
+  const moves = state.history.map((square: squares, move: number) => {
+    const desc = move ?
+      'Go to move #' + move :
+      'Go to game start'
 
-        return (
-          <li key={move}>
-            <button onClick={() => jumpTo(move)}>{desc}</button>
-          </li>
-        )
-    })
+    return (
+      <li key={move}>
+        <button className="border-solid border border-black rounded px-0.5 py-0.25 mb-1" onClick={() => jumpTo(move)}>{desc}</button>
+      </li>
+    )
+  })
 
-    const renderingBoard = (state: GameState):JSX.Element => {
-      return(
+  const renderingBoard = (state: GameState): JSX.Element => {
+    return (
       <Board
         squares={state.current}
         onClick={(i: number) => handleClick(i)}
         size={state.size}
       />)
-    }
+  }
 
-    console.log(state)
-
-    return (
-      <div className="game">
-        <div className="game-board">
-          {renderingBoard(state)}
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
-          <Dropdown
-            label="Choose the size of Game Board!!"
-            options={sizeOptions}
-            value={state.size}
-            onChange={handleSizeChange}
-          />
-          <div>Currently: {state.size}</div>
-        </div>
+  return (
+    <div className="flex flex-row">
+      <div>
+        {renderingBoard(state)}
       </div>
-    )
+      <div className="ml-6">
+        <div className="mb-1">{status}</div>
+        <ol className="pl-5">{moves}</ol>
+        <Dropdown
+          label="Choose the size of Game Board!!"
+          options={sizeOptions}
+          value={state.size}
+          onChange={handleSizeChange}
+        />
+        <div>Currently: {state.size}</div>
+      </div>
+    </div >
+  )
 }
 
-// サイズを入力して勝利条件を設定する
-// mapを使ってsetWinningArrayをrefactoringする
-const setWinningArray = (size: number):number[][] => {
+const setWinningArray = (size: number): number[][] => {
   const winningArray: number[][] = []
-  // 横方向の勝利条件
+
   const rowWinning = [...Array(size)]
   rowWinning.map((_, row) => {
-    return winningArray.push([...Array(size)].map((_, j) => size*row + j))
+    return winningArray.push([...Array(size)].map((_, j) => size * row + j))
   })
 
-  // 縦方向の勝利条件
   const columnWinning = [...Array(size)]
   columnWinning.map((_, column) => {
-    return winningArray.push([...Array(size)].map((_, j) => size*j + column))
+    return winningArray.push([...Array(size)].map((_, j) => size * j + column))
   })
 
-  // 斜め方向の勝利条件
-  winningArray.push([...Array(size)].map((_, j)=> (size+1)*j))
-  winningArray.push([...Array(size)].map((_, j)=> (size-1)*(j+1)))
+  winningArray.push([...Array(size)].map((_, j) => (size + 1) * j))
+  winningArray.push([...Array(size)].map((_, j) => (size - 1) * (j + 1)))
 
-  return(winningArray)
+  return (winningArray)
 }
 
-// ========================================
-const  calculateWinner = (size:number, squares: squares) => {
+const calculateWinner = (size: number, squares: squares) => {
   let lines: number[][] = setWinningArray(size)
   let testArray: number[] = Array(size)
-  for(let i = 0; i < lines.length; i ++) {
+  for (let i = 0; i < lines.length; i++) {
     testArray = lines[i]
     let winCount = 0
-    for(let j = 1; j < testArray.length; j ++) {
-      if(squares[testArray[0]] && squares[testArray[0]] === squares[testArray[j]]) {
+    for (let j = 1; j < testArray.length; j++) {
+      if (squares[testArray[0]] && squares[testArray[0]] === squares[testArray[j]]) {
         winCount++
       }
     }
 
-    if(winCount === size - 1) {
+    if (winCount === size - 1) {
       return squares[testArray[0]]
     }
   }

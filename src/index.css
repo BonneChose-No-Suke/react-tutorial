@@ -1,51 +1,16 @@
-body {
-  font: 14px 'Century Gothic', Futura, sans-serif;
-  margin: 20px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-lg font-[theme(fontFamily(century))] m-7
+  }
 }
 
-ol,
-ul {
-  padding-left: 30px;
-}
+@layer components {
 
-.board-row:after {
-  clear: both;
-  content: '';
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
-
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
+  .square {
+    @apply bg-white border border-solid border-[#999] float-left text-2xl font-bold my-[-1px] mx-[-1px] h-[34px] w-[34px] text-center p-0 focus:outline-none focus:bg-[#ddd]
+  }
 }
