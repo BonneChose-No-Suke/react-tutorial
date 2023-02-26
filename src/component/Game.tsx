@@ -85,29 +85,29 @@ export const Game = () => {
 }
 
 // サイズを入力して勝利条件を設定する
-const setWinningArray = (size: number): number[][] => {
-  let rowWinning: number[][] = []
-  for(let i = 0; i < size; i++) {
-    let rowWinningArray = [...Array(size)].map((_, j)=> size*i+j)
-    rowWinning.push(rowWinningArray)
-  }
+// mapを使ってsetWinningArrayをrefactoringする
+const setWinningArray = (size: number):number[][] => {
+  const winningArray: number[][] = []
+  // 横方向の勝利条件
+  const rowWinning = [...Array(size)]
+  rowWinning.map((_, row) => {
+    return winningArray.push([...Array(size)].map((_, j) => size*row + j))
+  })
 
-  let columnWinning: number[][] = []
-  for(let i = 0; i < size; i++) {
-    let columnWinningArray = [...Array(size)].map((_, j)=> size*j+i)
-    columnWinning.push(columnWinningArray)
-  }
+  // 縦方向の勝利条件
+  const columnWinning = [...Array(size)]
+  columnWinning.map((_, column) => {
+    return winningArray.push([...Array(size)].map((_, j) => size*j + column))
+  })
 
-  let crossWinning:number[][] = []
-  crossWinning.push([...Array(size)].map((_, i)=> (size+1)*i))
-  crossWinning.push([...Array(size)].map((_, i)=> (size-1)*(i+1)))
+  // 斜め方向の勝利条件
+  winningArray.push([...Array(size)].map((_, j)=> (size+1)*j))
+  winningArray.push([...Array(size)].map((_, j)=> (size-1)*(j+1)))
 
-  let winningArray = rowWinning.concat(columnWinning, crossWinning)
   return(winningArray)
 }
 
 // ========================================
-// 
 const  calculateWinner = (size:number, squares: squares) => {
   let lines: number[][] = setWinningArray(size)
   let testArray: number[] = Array(size)
