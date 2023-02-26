@@ -1,13 +1,19 @@
 import { gameReducer, initialState } from "hooks/gameReducer"
 import React, { useReducer } from "react"
-import { squares } from "type/GameState"
+import { GameState, squares } from "type/GameState"
 import { Board } from "./Board"
+import { Dropdown } from "./Dropdown"
 
 export const Game = () => {
-  const size = 5
   const [state, dispatch] = useReducer(gameReducer, initialState)
 
-  const winner = calculateWinner(size, state.current)
+  const sizeOptions = [
+    { label: '3', value: 3 },
+    { label: '5', value: 5 },
+    { label: '7', value: 7 },
+  ]
+
+  const winner = calculateWinner(state.size, state.current)
   let status: string
   if (winner) {
     status = 'Winner: ' + winner;
@@ -15,19 +21,24 @@ export const Game = () => {
     status = 'Next player: ' + (state.xIsNext ? 'X' : 'O')
   }
 
+  const handleSizeChange = (event: { target: { value: number }; }) => {
+    const newSize = Number(event.target.value)
+    dispatch({ type: 'CHANGE_GameBoardSize', payload: { history: state.history, current: state.current, step:state.stepNumber, size: newSize } })
+  };
+
   const jumpTo = (step: number) => {
-    dispatch({ type: 'RETURN_TO', payload: {step: step, history: state.history, current: state.current} })
+    dispatch({ type: 'RETURN_TO', payload: {step: step, history: state.history, current: state.current, size: (state.size)} })
   }
 
   const handleClick = (i: number) => {
     const currentHistory = state.history.slice(0, state.stepNumber + 1)
     const current = currentHistory[currentHistory.length - 1]
     const currentSquares = current.slice()
-    if (calculateWinner(size, currentSquares) || currentSquares[i]) {
+    if (calculateWinner(state.size, currentSquares) || currentSquares[i]) {
       return;
     }
     currentSquares[i] = state.xIsNext ? 'X' : 'O'
-    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, current: currentSquares, step: currentHistory.length}})
+    dispatch({ type: 'TURN_PASSED', payload: {history: currentHistory, current: currentSquares, step: currentHistory.length, size: state.size}})
   }
 
     const moves = state.history.map((square:squares, move: number)=> {
@@ -42,22 +53,35 @@ export const Game = () => {
         )
     })
 
+    const renderingBoard = (state: GameState):JSX.Element => {
+      return(
+      <Board
+        squares={state.current}
+        onClick={(i: number) => handleClick(i)}
+        size={state.size}
+      />)
+    }
+
+    console.log(state)
+
     return (
       <div className="game">
         <div className="game-board">
-          <Board
-            squares={state.current}
-            onClick={(i: number) => handleClick(i)}
-            size={size}
-          />
+          {renderingBoard(state)}
         </div>
         <div className="game-info">
           <div>{status}</div>
           <ol>{moves}</ol>
+          <Dropdown
+            label="Choose the size of Game Board!!"
+            options={sizeOptions}
+            value={state.size}
+            onChange={handleSizeChange}
+          />
+          <div>Currently: {state.size}</div>
         </div>
       </div>
     )
-
 }
 
 // サイズを入力して勝利条件を設定する
