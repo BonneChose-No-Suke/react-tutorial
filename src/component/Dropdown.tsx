@@ -15,5 +15,5 @@ export const Dropdown = ({ label, value, options, onChange }: dropDownArgs) => {
         ))}
       </select>
     </label>
-  ); 
+  );
 };

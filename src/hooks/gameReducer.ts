@@ -28,7 +28,7 @@ export const gameReducer = (state: GameState, action: GameAction):GameState => {
         xIsNext: (action.payload.step) % 2 === 0,
         current:  state.history[action.payload.step]
       }
-    case "CHANGE_GameBoardSize":
+    case 'CHANGE_GameBoardSize':
       return {
         ...state,
         size: action.payload.size,
